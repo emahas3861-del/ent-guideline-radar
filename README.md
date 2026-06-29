@@ -85,11 +85,17 @@ DOI 10.1177/10507256251363120
 
 ### 部署交互机器人
 
-推荐用 Render 部署，本仓库已提供 `render.yaml`。
+可以用 Render，也可以用腾讯云。仓库已提供两种部署入口：
 
-1. 在 Render 新建 Blueprint 或 Web Service，连接这个 GitHub 仓库。
-2. 启动命令使用：`uvicorn api.app:app --host 0.0.0.0 --port $PORT`。
-3. 在 Render 环境变量中添加：
+- `render.yaml`：适合 Render Blueprint。
+- `Dockerfile`：适合腾讯云云托管、容器服务或任何支持 Dockerfile 构建的 Web 服务。
+
+#### 腾讯云部署要点
+
+在腾讯云里创建一个能暴露公网 HTTPS 的 Web 服务，代码来源选择这个 GitHub 仓库，构建方式选择 Dockerfile。
+服务需要监听环境变量 `PORT` 指定的端口；本仓库的 Dockerfile 已处理好。
+
+环境变量填写：
 
 | 环境变量 | 说明 |
 |---|---|
@@ -100,6 +106,18 @@ DOI 10.1177/10507256251363120
 | `NCBI_API_KEY` | NCBI API Key，可选 |
 
 部署成功后，服务地址类似：
+
+```text
+https://你的腾讯云服务域名/feishu/events
+```
+
+#### Render 部署要点
+
+1. 在 Render 新建 Blueprint 或 Web Service，连接这个 GitHub 仓库。
+2. 启动命令使用：`uvicorn api.app:app --host 0.0.0.0 --port $PORT`。
+3. 填入同样的环境变量。
+
+Render 的事件订阅地址类似：
 
 ```text
 https://你的服务名.onrender.com/feishu/events
