@@ -13,11 +13,11 @@
     },
     {
       "name": "耳科与听力",
-      "query": "(\"sudden sensorineural hearing loss\" OR otitis media OR cholesteatoma OR cochlear implant OR vestibular schwannoma OR \"Meniere disease\" OR BPPV OR vertigo OR tinnitus OR otology OR neurotology) AND (guideline OR consensus OR \"systematic review\" OR \"clinical trial\" OR \"randomized trial\")"
+      "query": "(\"sudden sensorineural hearing loss\" OR otitis media OR cholesteatoma OR cochlear implant OR vestibular schwannoma OR \"Meniere disease\" OR BPPV OR vertigo OR tinnitus OR otology OR neurotology OR tympanoplasty OR mastoidectomy) AND (guideline OR consensus OR \"systematic review\" OR \"clinical trial\" OR \"randomized trial\")"
     },
     {
       "name": "鼻科与变态反应",
-      "query": "(chronic rhinosinusitis OR nasal polyps OR allergic rhinitis OR endoscopic sinus surgery OR epistaxis OR olfaction OR rhinology OR sinusitis) AND (guideline OR consensus OR EPOS OR ICAR OR biologic OR dupilumab OR \"systematic review\" OR \"clinical trial\")"
+      "query": "(chronic rhinosinusitis OR nasal polyps OR allergic rhinitis OR endoscopic sinus surgery OR epistaxis OR olfaction OR rhinology OR sinusitis OR skull base OR \"anterior skull base\") AND (guideline OR consensus OR EPOS OR ICAR OR biologic OR dupilumab OR \"systematic review\" OR \"clinical trial\")"
     },
     {
       "name": "咽喉、气道与睡眠",
@@ -26,6 +26,10 @@
     {
       "name": "儿童耳鼻咽喉",
       "query": "(pediatric OR children OR child) AND (otolaryngology OR otitis media OR hearing loss OR tonsillectomy OR adenoidectomy OR cholesteatoma OR airway OR thyroid nodule OR neck mass OR sinusitis) AND (guideline OR consensus OR \"clinical practice guideline\" OR \"systematic review\")"
+    },
+    {
+      "name": "综合指南、围手术期与技术进展",
+      "query": "(otolaryngology OR \"head and neck surgery\" OR \"facial plastic surgery\" OR skull base OR parotidectomy OR thyroidectomy OR laryngectomy OR tympanoplasty OR mastoidectomy OR \"endoscopic ear surgery\") AND (guideline OR consensus OR \"clinical practice guideline\" OR \"systematic review\" OR \"randomized trial\" OR perioperative OR complication OR \"quality improvement\")"
     }
   ]
 }

@@ -1,4 +1,4 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 import json
 import os
@@ -25,6 +25,7 @@ class Article:
     url: str
     abstract: str
     pubtypes: list[str]
+    pmcid: str = ""
 
 
 def _get_json(endpoint: str, params: dict, retries: int = 2) -> dict:
@@ -84,10 +85,14 @@ def fetch_article_details(pmids: list[str], topic_by_pmid: dict[str, str]) -> li
         abstract = _abstract(article_node)
         pubtypes = [_clean_text(x) for x in article_node.findall(".//PublicationType")] if article_node is not None else []
         doi = ""
+        pmcid = ""
         for aid in node.findall(".//ArticleId"):
-            if aid.attrib.get("IdType") == "doi":
-                doi = _clean_text(aid)
-                break
+            id_type = aid.attrib.get("IdType")
+            value = _clean_text(aid)
+            if id_type == "doi":
+                doi = value
+            elif id_type in {"pmc", "pmcid"}:
+                pmcid = value.replace("pmc-id:", "").replace(";", "").strip().upper()
         item_id = f"PMID:{pmid}" if pmid else f"DOI:{doi}"
         articles.append(
             Article(
@@ -102,6 +107,7 @@ def fetch_article_details(pmids: list[str], topic_by_pmid: dict[str, str]) -> li
                 url=f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/" if pmid else "",
                 abstract=abstract,
                 pubtypes=pubtypes,
+                pmcid=pmcid,
             )
         )
     return articles

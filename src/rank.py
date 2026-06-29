@@ -35,6 +35,9 @@ ENT_TERMS = {
     "otitis", "hearing", "cochlear", "cholesteatoma", "vestibular", "meniere", "bppv", "vertigo",
     "tinnitus", "rhinology", "rhinosinusitis", "sinusitis", "nasal", "epistaxis", "olfaction",
     "allergic rhinitis", "pediatric otolaryngology", "cleft palate", "ear", "nose", "throat",
+    "skull base", "anterior skull base", "facial plastic", "parotid", "parotidectomy", "submandibular",
+    "parathyroid", "thyroidectomy", "laryngectomy", "tympanoplasty", "mastoidectomy", "eustachian",
+    "endoscopic ear surgery", "stapes", "ossiculoplasty",
 }
 
 OFF_TOPIC_TERMS = {
