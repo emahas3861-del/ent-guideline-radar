@@ -1,0 +1,31 @@
+{
+  "lookback_days_primary": 10,
+  "lookback_days_fallback": 180,
+  "max_items": 12,
+  "topics": [
+    {
+      "name": "头颈肿瘤",
+      "query": "(\"head and neck cancer\" OR \"head and neck squamous cell carcinoma\" OR oropharyngeal OR laryngeal OR hypopharyngeal OR nasopharyngeal OR \"salivary gland cancer\") AND (guideline OR consensus OR \"clinical practice guideline\" OR immunotherapy OR \"targeted therapy\" OR de-escalation OR surveillance)"
+    },
+    {
+      "name": "甲状腺与颈部肿块",
+      "query": "(thyroid nodule OR differentiated thyroid cancer OR follicular thyroid carcinoma OR follicular neoplasm OR NIFTP OR Bethesda OR \"molecular testing\" OR \"neck mass\") AND (guideline OR consensus OR \"risk stratification\" OR lobectomy OR \"active surveillance\" OR \"radioactive iodine\")"
+    },
+    {
+      "name": "耳科与听力",
+      "query": "(\"sudden sensorineural hearing loss\" OR otitis media OR cholesteatoma OR cochlear implant OR vestibular schwannoma OR \"Meniere disease\" OR vertigo) AND (guideline OR consensus OR \"systematic review\" OR \"clinical trial\")"
+    },
+    {
+      "name": "鼻科与变态反应",
+      "query": "(chronic rhinosinusitis OR nasal polyps OR allergic rhinitis OR endoscopic sinus surgery OR epistaxis OR olfaction) AND (guideline OR consensus OR EPOS OR ICAR OR biologic OR dupilumab)"
+    },
+    {
+      "name": "咽喉、气道与睡眠",
+      "query": "(vocal fold OR dysphonia OR dysphagia OR tracheostomy OR airway management OR obstructive sleep apnea OR tonsillectomy) AND (guideline OR consensus OR \"clinical practice guideline\" OR \"systematic review\" OR \"randomized trial\")"
+    },
+    {
+      "name": "儿童耳鼻咽喉",
+      "query": "(pediatric OR children OR child) AND (otolaryngology OR otitis media OR tonsillectomy OR adenoidectomy OR airway OR thyroid nodule OR neck mass) AND (guideline OR consensus OR \"clinical practice guideline\" OR \"systematic review\")"
+    }
+  ]
+}
