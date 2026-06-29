@@ -28,6 +28,30 @@ KEYWORDS = {
     "molecular": 10,
 }
 
+ENT_TERMS = {
+    "otolaryngology", "head and neck", "laryngeal", "larynx", "oropharyngeal", "hypopharyngeal",
+    "nasopharyngeal", "oral cavity", "salivary", "thyroid", "neck mass", "vocal fold", "dysphonia",
+    "dysphagia", "tracheostomy", "upper airway", "sleep apnea", "tonsillectomy", "adenoidectomy",
+    "otitis", "hearing", "cochlear", "cholesteatoma", "vestibular", "meniere", "bppv", "vertigo",
+    "tinnitus", "rhinology", "rhinosinusitis", "sinusitis", "nasal", "epistaxis", "olfaction",
+    "allergic rhinitis", "pediatric otolaryngology", "cleft palate", "ear", "nose", "throat",
+}
+
+OFF_TOPIC_TERMS = {
+    "achalasia", "poem", "ards", "delirium", "pertussis", "copd", "asthma", "peep",
+    "thoracic", "abdominal", "intubation sedative", "etomidate", "ketamine", "propofol",
+    "remethylation", "homocysteine", "soft tissue sarcoma", "extremity", "trunk",
+}
+
+
+def is_relevant(article: Article) -> bool:
+    haystack = f"{article.topic} {article.title} {article.abstract}".lower()
+    has_ent = any(term in haystack for term in ENT_TERMS)
+    has_off_topic = any(term in haystack for term in OFF_TOPIC_TERMS)
+    if has_ent:
+        return True
+    return not has_off_topic
+
 
 def score_article(article: Article) -> int:
     score = 0
@@ -39,11 +63,13 @@ def score_article(article: Article) -> int:
             score += value
     if article.abstract:
         score += 5
+    if not is_relevant(article):
+        score -= 200
     return score
 
 
 def select_items(articles: list[Article], seen: set[str], max_items: int) -> list[Article]:
-    unseen = [a for a in articles if a.id and a.id not in seen]
+    unseen = [a for a in articles if a.id and a.id not in seen and is_relevant(a)]
     dedup: dict[str, Article] = {}
     for item in unseen:
         key = item.doi.lower() if item.doi else item.pmid
