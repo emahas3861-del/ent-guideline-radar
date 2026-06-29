@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import base64
 import hashlib
@@ -34,8 +34,8 @@ def send_text_report(title: str, report: str) -> None:
 
         req = urllib.request.Request(
             webhook,
-            data=json.dumps(payload).encode("utf-8"),
-            headers={"Content-Type": "application/json"},
+            data=json.dumps(payload, ensure_ascii=False).encode("utf-8"),
+            headers={"Content-Type": "application/json; charset=utf-8"},
             method="POST",
         )
         with urllib.request.urlopen(req, timeout=30) as resp:
@@ -63,3 +63,4 @@ def _split_text(text: str, limit: int) -> list[str]:
     if current:
         chunks.append("\n".join(current))
     return chunks
+

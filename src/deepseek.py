@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import json
 import os
@@ -29,14 +29,14 @@ def build_prompt(items: list[Article]) -> str:
             }
         )
     return (
-        "你是耳鼻咽喉头颈外科临床文献秘书。请把以下新文献/指南转述成中文详细报告，"
-        "要求面向忙碌临床医生，容易阅读，但不要夸大证据。\n\n"
+        "你是耳鼻咽喉头颈外科临床文献秘书。请把以下新文献或指南转述成中文详细报告。"
+        "报告面向忙碌临床医生，要容易阅读，但必须严谨，不要夸大证据。\n\n"
         "输出结构：\n"
         "1. 本期一句话结论\n"
         "2. 本期最值得看的 3-5 条\n"
-        "3. 按主题分组逐条说明：原文链接、PMID/DOI、研究/指南类型、核心内容、可能改变的临床决策、是否建议精读\n"
+        "3. 按主题分组逐条说明：原文链接、PMID/DOI、研究或指南类型、核心内容、可能改变的临床决策、是否建议精读\n"
         "4. 证据限制与需要进一步确认的地方\n"
-        "5. 可转化为患者科普/短视频的选题\n\n"
+        "5. 可转化为患者科普或短视频的选题\n\n"
         "注意：只能基于给定标题、摘要和元数据总结；没有摘要时要明确说信息有限。"
         "不要编造指南全文内容，不要编造数据。\n\n"
         f"文献列表 JSON：\n{json.dumps(records, ensure_ascii=False, indent=2)}"
@@ -61,10 +61,10 @@ def summarize(items: list[Article]) -> str:
     }
     req = urllib.request.Request(
         DEEPSEEK_URL,
-        data=json.dumps(payload).encode("utf-8"),
+        data=json.dumps(payload, ensure_ascii=False).encode("utf-8"),
         headers={
             "Authorization": f"Bearer {api_key}",
-            "Content-Type": "application/json",
+            "Content-Type": "application/json; charset=utf-8",
         },
         method="POST",
     )
