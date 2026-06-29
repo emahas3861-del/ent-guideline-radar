@@ -26,6 +26,7 @@ class Article:
     abstract: str
     pubtypes: list[str]
     pmcid: str = ""
+    pmc_release: str = ""
 
 
 def _get_json(endpoint: str, params: dict, retries: int = 2) -> dict:
@@ -84,15 +85,16 @@ def fetch_article_details(pmids: list[str], topic_by_pmid: dict[str, str]) -> li
         authors = _authors(article_node)
         abstract = _abstract(article_node)
         pubtypes = [_clean_text(x) for x in article_node.findall(".//PublicationType")] if article_node is not None else []
-        doi = ""
+        doi = _article_doi(article_node)
         pmcid = ""
-        for aid in node.findall(".//ArticleId"):
+        for aid in node.findall("./PubmedData/ArticleIdList/ArticleId"):
             id_type = aid.attrib.get("IdType")
             value = _clean_text(aid)
-            if id_type == "doi":
+            if id_type == "doi" and not doi:
                 doi = value
             elif id_type in {"pmc", "pmcid"}:
                 pmcid = value.replace("pmc-id:", "").replace(";", "").strip().upper()
+        pmc_release = _pmc_release_date(node)
         item_id = f"PMID:{pmid}" if pmid else f"DOI:{doi}"
         articles.append(
             Article(
@@ -108,6 +110,7 @@ def fetch_article_details(pmids: list[str], topic_by_pmid: dict[str, str]) -> li
                 abstract=abstract,
                 pubtypes=pubtypes,
                 pmcid=pmcid,
+                pmc_release=pmc_release,
             )
         )
     return articles
@@ -136,6 +139,23 @@ def _text(node, path: str) -> str:
 def _clean_text(node) -> str:
     return " ".join("".join(node.itertext()).split())
 
+def _article_doi(article_node) -> str:
+    if article_node is None:
+        return ""
+    for item in article_node.findall("ELocationID"):
+        if item.attrib.get("EIdType") == "doi":
+            return _clean_text(item)
+    return ""
+
+
+def _pmc_release_date(node) -> str:
+    for item in node.findall("./PubmedData/History/PubMedPubDate"):
+        if item.attrib.get("PubStatus") == "pmc-release":
+            year = item.findtext("Year", default="")
+            month = item.findtext("Month", default="")
+            day = item.findtext("Day", default="")
+            return "-".join(x.zfill(2) if len(x) == 1 else x for x in [year, month, day] if x)
+    return ""
 
 def _pubdate(article_node) -> str:
     if article_node is None:
