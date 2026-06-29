@@ -14,6 +14,7 @@ OR "sudden hearing loss" OR "sleep apnea" OR "neck mass" OR pediatric otolaryngo
 OR "skull base" OR "facial plastic surgery" OR parotidectomy OR thyroidectomy OR tympanoplasty
 """
 
+
 TOPIC_MAPPINGS = [
     (
         ["过敏性鼻炎", "变应性鼻炎", "allergic rhinitis", "hay fever"],
@@ -41,6 +42,36 @@ TOPIC_MAPPINGS = [
         ["vertigo", "meniere", "bppv", "benign paroxysmal positional vertigo"],
     ),
     (
+        ["鼻出血", "鼻衄", "epistaxis"],
+        '(epistaxis[Title/Abstract] OR epistaxis[MeSH Terms] OR "nosebleed"[Title/Abstract] OR "nose bleeding"[Title/Abstract])',
+        ["epistaxis", "nosebleed", "nose bleeding"],
+    ),
+    (
+        ["osa", "阻塞性睡眠呼吸暂停", "睡眠呼吸暂停", "鼾症", "打鼾", "sleep apnea", "snoring"],
+        '("obstructive sleep apnea"[Title/Abstract] OR "sleep apnea syndromes"[MeSH Terms] OR "OSA"[Title/Abstract] OR "sleep disordered breathing"[Title/Abstract] OR snoring[Title/Abstract])',
+        ["obstructive sleep apnea", "sleep apnea", "sleep disordered breathing", "snoring"],
+    ),
+    (
+        ["耳鸣", "tinnitus"],
+        '(tinnitus[Title/Abstract] OR tinnitus[MeSH Terms])',
+        ["tinnitus"],
+    ),
+    (
+        ["中耳炎", "分泌性中耳炎", "化脓性中耳炎", "otitis media"],
+        '("otitis media"[Title/Abstract] OR "otitis media"[MeSH Terms] OR "otitis media with effusion"[Title/Abstract] OR "chronic suppurative otitis media"[Title/Abstract])',
+        ["otitis media", "middle ear infection"],
+    ),
+    (
+        ["喉癌", "喉鳞癌", "laryngeal cancer", "larynx cancer"],
+        '("laryngeal cancer"[Title/Abstract] OR "laryngeal neoplasms"[MeSH Terms] OR "larynx cancer"[Title/Abstract] OR "laryngeal squamous cell carcinoma"[Title/Abstract])',
+        ["laryngeal cancer", "laryngeal neoplasms", "larynx cancer", "laryngeal squamous"],
+    ),
+    (
+        ["涎腺肿瘤", "唾液腺肿瘤", "腮腺肿瘤", "颌下腺肿瘤", "salivary gland tumor", "parotid tumor"],
+        '("salivary gland neoplasms"[MeSH Terms] OR "salivary gland tumor"[Title/Abstract] OR "salivary gland neoplasm"[Title/Abstract] OR "parotid neoplasm"[Title/Abstract] OR "parotid tumor"[Title/Abstract])',
+        ["salivary gland neoplasm", "salivary gland tumor", "parotid neoplasm", "parotid tumor"],
+    ),
+    (
         ["头颈鳞癌", "头颈癌", "head and neck cancer", "hnscc"],
         '("head and neck cancer"[Title/Abstract] OR "head and neck squamous cell carcinoma"[Title/Abstract] OR HNSCC[Title/Abstract])',
         ["head and neck cancer", "head and neck squamous", "hnscc"],
@@ -50,6 +81,35 @@ TOPIC_MAPPINGS = [
         '(thyroid[Title/Abstract] OR thyroid[MeSH Terms])',
         ["thyroid"],
     ),
+]
+
+TERM_TRANSLATIONS = [
+    ("鼻出血", '"epistaxis"[Title/Abstract] OR epistaxis[MeSH Terms]'),
+    ("鼻衄", '"epistaxis"[Title/Abstract] OR epistaxis[MeSH Terms]'),
+    ("阻塞性睡眠呼吸暂停", '"obstructive sleep apnea"[Title/Abstract] OR "sleep apnea syndromes"[MeSH Terms]'),
+    ("睡眠呼吸暂停", '"sleep apnea"[Title/Abstract] OR "sleep apnea syndromes"[MeSH Terms]'),
+    ("鼾症", 'snoring[Title/Abstract] OR snoring[MeSH Terms]'),
+    ("打鼾", 'snoring[Title/Abstract] OR snoring[MeSH Terms]'),
+    ("耳鸣", 'tinnitus[Title/Abstract] OR tinnitus[MeSH Terms]'),
+    ("分泌性中耳炎", '"otitis media with effusion"[Title/Abstract] OR "otitis media with effusion"[MeSH Terms]'),
+    ("化脓性中耳炎", '"chronic suppurative otitis media"[Title/Abstract]'),
+    ("中耳炎", '"otitis media"[Title/Abstract] OR "otitis media"[MeSH Terms]'),
+    ("喉癌", '"laryngeal cancer"[Title/Abstract] OR "laryngeal neoplasms"[MeSH Terms]'),
+    ("喉鳞癌", '"laryngeal squamous cell carcinoma"[Title/Abstract]'),
+    ("声带白斑", '"vocal cord leukoplakia"[Title/Abstract] OR "vocal fold leukoplakia"[Title/Abstract]'),
+    ("声带息肉", '"vocal cord polyp"[Title/Abstract] OR "vocal fold polyp"[Title/Abstract]'),
+    ("声嘶", 'dysphonia[Title/Abstract] OR hoarseness[Title/Abstract]'),
+    ("嗓音", 'voice[Title/Abstract] OR dysphonia[Title/Abstract]'),
+    ("吞咽困难", 'dysphagia[Title/Abstract] OR dysphagia[MeSH Terms]'),
+    ("扁桃体", 'tonsil[Title/Abstract] OR tonsillectomy[Title/Abstract]'),
+    ("腺样体", 'adenoid[Title/Abstract] OR adenoidectomy[Title/Abstract]'),
+    ("涎腺肿瘤", '"salivary gland neoplasms"[MeSH Terms] OR "salivary gland tumor"[Title/Abstract]'),
+    ("唾液腺肿瘤", '"salivary gland neoplasms"[MeSH Terms] OR "salivary gland tumor"[Title/Abstract]'),
+    ("腮腺肿瘤", '"parotid neoplasm"[Title/Abstract] OR "parotid tumor"[Title/Abstract]'),
+    ("颌下腺肿瘤", '"submandibular gland neoplasm"[Title/Abstract] OR "submandibular gland tumor"[Title/Abstract]'),
+    ("颈部包块", '"neck mass"[Title/Abstract] OR "neck masses"[Title/Abstract]'),
+    ("颈部肿块", '"neck mass"[Title/Abstract] OR "neck masses"[Title/Abstract]'),
+    ("甲状腺结节", '"thyroid nodule"[Title/Abstract] OR "thyroid nodule"[MeSH Terms]'),
 ]
 
 GUIDELINE_FILTER = """(
@@ -105,16 +165,18 @@ def find_articles(query: str) -> list[Article]:
     pubmed_query = build_pubmed_query(query)
     pmids = search_pmids(pubmed_query, lookback_days=3650, retmax=20)
     articles = fetch_article_details(pmids, {pmid: "即时查询" for pmid in pmids})
-    focused = filter_by_query_focus(query, articles)
-    return focused or articles
+    return filter_by_query_focus(query, articles)
 
 
 def build_pubmed_query(query: str) -> str:
     terms = query.replace("，", " ").replace(",", " ").strip()
     low = terms.lower()
     mapped = mapped_pubmed_terms(terms)
+    translated = translated_pubmed_terms(terms)
     if mapped:
         base = mapped
+    elif translated:
+        base = translated
     elif query_mentions_ent_scope(low):
         base = terms
     else:
@@ -130,7 +192,15 @@ def mapped_pubmed_terms(query: str) -> str:
     for triggers, pubmed_terms, _focus_terms in TOPIC_MAPPINGS:
         if any(trigger.lower() in low for trigger in triggers):
             matched.append(pubmed_terms)
-    return " AND ".join(matched)
+    return " AND ".join(unique_keep_order(matched))
+
+
+def translated_pubmed_terms(query: str) -> str:
+    matched = []
+    for trigger, pubmed_terms in TERM_TRANSLATIONS:
+        if trigger in query:
+            matched.append(f"({pubmed_terms})")
+    return " AND ".join(unique_keep_order(matched))
 
 
 def query_focus_terms(query: str) -> list[str]:
@@ -142,16 +212,52 @@ def query_focus_terms(query: str) -> list[str]:
     return terms
 
 
+def unique_keep_order(items: list[str]) -> list[str]:
+    seen = set()
+    result = []
+    for item in items:
+        if item not in seen:
+            result.append(item)
+            seen.add(item)
+    return result
+
+
 def filter_by_query_focus(query: str, articles: list[Article]) -> list[Article]:
     focus_terms = query_focus_terms(query)
     if not focus_terms:
         return articles
-    matched = []
+    title_matched = []
+    abstract_matched = []
     for article in articles:
-        haystack = f"{article.title} {article.abstract}".lower()
-        if any(term in haystack for term in focus_terms):
-            matched.append(article)
-    return matched
+        title = article.title.lower()
+        abstract = article.abstract.lower()
+        if any(focus_term_matches(term, title) for term in focus_terms):
+            title_matched.append(article)
+        elif any(focus_term_matches(term, abstract) for term in focus_terms):
+            abstract_matched.append(article)
+    if query_requests_guidance(query):
+        guidance_matched = [article for article in abstract_matched if article_looks_guidance(article)]
+        return title_matched or guidance_matched
+    return title_matched or abstract_matched
+
+
+def query_requests_guidance(query: str) -> bool:
+    low = query.lower()
+    return any(word in low for word in ["guideline", "指南", "共识", "consensus", "recommendation", "建议"])
+
+
+def article_looks_guidance(article: Article) -> bool:
+    title = article.title.lower()
+    pubtypes = {item.lower() for item in article.pubtypes}
+    guidance_title_terms = ["guideline", "consensus", "recommendation", "recommendations", "statement", "position paper"]
+    guidance_pubtypes = {"guideline", "practice guideline", "consensus development conference"}
+    return any(term in title for term in guidance_title_terms) or bool(pubtypes & guidance_pubtypes)
+
+
+def focus_term_matches(term: str, haystack: str) -> bool:
+    if len(term) <= 3 or term.isupper():
+        return re.search(rf"(?<![a-z0-9]){re.escape(term.lower())}(?![a-z0-9])", haystack) is not None
+    return term in haystack
 
 
 def query_mentions_ent_scope(low: str) -> bool:
